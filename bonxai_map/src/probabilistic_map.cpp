@@ -1,5 +1,5 @@
 #include "bonxai_map/probabilistic_map.hpp"
-#include <eigen3/Eigen/Geometry>
+#include <Eigen/Geometry>
 #include <unordered_set>
 
 namespace Bonxai

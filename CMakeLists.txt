@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.19)
 project(Bonxai)
 
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -13,14 +13,12 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif()
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS "-fno-omit-frame-pointer -g")
 
 #---- Add the subdirectory cmake ----
 set(CMAKE_CONFIG_PATH ${CMAKE_MODULE_PATH}  "${CMAKE_CURRENT_LIST_DIR}/cmake")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CONFIG_PATH}")
 
 set(ENABLE_BENCHMARK OFF CACHE BOOL "Enable benchmarking")
-set(ENABLE_MAP OFF CACHE BOOL "Enable map generation")
 set(ENABLE_PCL OFF CACHE BOOL "Enable PCL")
 
 #---- Use Address sanitizer if compiled in Debug mode ----
@@ -39,31 +37,22 @@ endif()
 
 ####################################################
 # Adds the core header only library
-add_subdirectory(bonxai_core)
 
-
-# Adds optional dependencies
+ # Adds optional dependencies
 if(ENABLE_BENCHMARK)
     find_package(benchmark QUIET)
     find_package(octomap QUIET)
     find_package(LZ4 QUIET)
 endif()
+add_subdirectory(bonxai_core)
+add_subdirectory(bonxai_map)
+add_subdirectory(examples)
 
-if(${ENABLE_EXAMPLES})
-    add_subdirectory(examples)
-endif()
-if(ENABLE_PCL OR ENABLE_EXAMPLES)
-    find_package(PCL REQUIRED COMPONENTS common io QUIET)
-endif()
-if(ENABLE_MAP)
-    find_package(Eigen3 QUIET)
-    add_subdirectory(bonxai_map)
-endif()
 
 # Default behavior
 find_package(ament_cmake QUIET)
 
-if ( ament_cmake_FOUND )
+if ( ament_cmake_FOUND AND ENABLE_PCL)
 
     project(bonxai_ros)
 

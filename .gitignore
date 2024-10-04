@@ -35,3 +35,6 @@
 
 .vscode
 *.pcd
+
+.vs
+/out

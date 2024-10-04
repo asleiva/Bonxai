@@ -19,12 +19,9 @@ set(CMAKE_CXX_FLAGS "-fno-omit-frame-pointer -g")
 set(CMAKE_CONFIG_PATH ${CMAKE_MODULE_PATH}  "${CMAKE_CURRENT_LIST_DIR}/cmake")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CONFIG_PATH}")
 
-find_package(PCL REQUIRED COMPONENTS common io)
-
-find_package(benchmark QUIET)
-find_package(octomap QUIET)
-find_package(LZ4 QUIET)
-find_package(Eigen3 QUIET)
+set(ENABLE_BENCHMARK OFF CACHE BOOL "Enable benchmarking")
+set(ENABLE_MAP OFF CACHE BOOL "Enable map generation")
+set(ENABLE_PCL OFF CACHE BOOL "Enable PCL")
 
 #---- Use Address sanitizer if compiled in Debug mode ----
 option(BONXAI_SANITIZE "Add address sanitizer when compiling in Debug mode" ON)
@@ -41,9 +38,26 @@ endif()
 
 
 ####################################################
+# Adds the core header only library
 add_subdirectory(bonxai_core)
-add_subdirectory(bonxai_map)
-add_subdirectory(examples)
+
+# Adds optional dependencies
+if(ENABLE_BENCHMARK OR ENABLE_EXAMPLES)
+    find_package(benchmark QUIET)
+    find_package(octomap QUIET)
+    find_package(LZ4 QUIET)
+endif()
+
+if(${ENABLE_EXAMPLES})
+    add_subdirectory(examples)
+endif()
+if(ENABLE_PCL OR ENABLE_EXAMPLES)
+    find_package(PCL REQUIRED COMPONENTS common io QUIET)
+endif()
+if(ENABLE_MAP OR ENABLE_EXAMPLES)
+    find_package(Eigen3 QUIET)
+    add_subdirectory(bonxai_map)
+endif()
 
 # Default behavior
 find_package(ament_cmake QUIET)

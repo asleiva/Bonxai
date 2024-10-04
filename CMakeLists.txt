@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.1)
 project(Bonxai)
 
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -41,8 +41,9 @@ endif()
 # Adds the core header only library
 add_subdirectory(bonxai_core)
 
+
 # Adds optional dependencies
-if(ENABLE_BENCHMARK OR ENABLE_EXAMPLES)
+if(ENABLE_BENCHMARK)
     find_package(benchmark QUIET)
     find_package(octomap QUIET)
     find_package(LZ4 QUIET)
@@ -54,7 +55,7 @@ endif()
 if(ENABLE_PCL OR ENABLE_EXAMPLES)
     find_package(PCL REQUIRED COMPONENTS common io QUIET)
 endif()
-if(ENABLE_MAP OR ENABLE_EXAMPLES)
+if(ENABLE_MAP)
     find_package(Eigen3 QUIET)
     add_subdirectory(bonxai_map)
 endif()

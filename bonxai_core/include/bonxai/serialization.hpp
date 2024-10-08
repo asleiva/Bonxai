@@ -87,7 +87,7 @@ inline void Serialize(std::ostream& out, const VoxelGrid<DataT>& grid)
   char header[256];
   std::string type_name = details::demangle(typeid(DataT).name());
 
-  sprintf_s(header,
+  sprintf(header,
           "Bonxai::VoxelGrid<%s,%d,%d>(%lf)\n",
           type_name.c_str(),
           grid.INNER_BITS,

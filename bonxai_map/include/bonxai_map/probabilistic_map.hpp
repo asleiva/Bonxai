@@ -40,14 +40,14 @@ public:
   /// integer (6 decimals after the comma)
   [[nodiscard]] static int32_t logods(float prob)
   {
-    return int32_t(1e6f * std::logf(prob / (1.0f - prob)));
+    return int32_t(1e6f * std::log(prob / (1.0f - prob)));
   }
 
   /// Expect the fixed comma value returned by logods()
   [[nodiscard]] static float prob(int32_t logods_fixed)
   {
     float logods = float(logods_fixed) * 1e-6f;
-    return (1.0f - 1.0f / (1.0f + std::expf(logods)));
+    return (1.0f - 1.0f / (1.0f + std::exp(logods)));
   }
 
   struct CellT
